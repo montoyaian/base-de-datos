@@ -1,0 +1,146 @@
+- name: Connect to Database
+  hosts: localhost
+  vars:
+    server: "appservermontoya.database.windows.net"
+    port: 1433
+    user: "sqladmin"
+    password: "Azure@123"
+    database: "appdb"
+
+  tasks:
+    - name: Comprobar conexión a Azure SQL Server
+      community.general.mssql_db:
+        login_host: "{{ server }}"
+        login_user: "{{ user }}"
+        login_password: "{{ password }}"
+        login_port: "{{ port }}"
+        name: "{{ database }}"
+        state: present
+      register: db_connection_result
+
+
+    - name: Crear tabla cliente S
+      community.general.mssql_script:
+        login_host: "{{ server }}"
+        login_user: "{{ user }}"
+        login_password: "{{ password }}"
+        login_port: "{{ port }}"
+        name: "{{ database }}"
+        script: |
+          CREATE TABLE standard_client (
+            ID INT IDENTITY(1,1) PRIMARY KEY,
+            Name NVARCHAR(255) NOT NULL,
+            Contact NVARCHAR(50),
+            Bookings INT DEFAULT 0,
+            Email NVARCHAR(255) UNIQUE NOT NULL,
+            Password NVARCHAR(255) NOT NULL
+          );
+
+
+    - name: Crear tabla cliente P
+      community.general.mssql_script:
+        login_host: "{{ server }}"
+        login_user: "{{ user }}"
+        login_password: "{{ password }}"
+        login_port: "{{ port }}"
+        name: "{{ database }}"
+        script: |
+          CREATE TABLE premium_client (
+            ID INT IDENTITY(1,1) PRIMARY KEY,
+            Name NVARCHAR(255) NOT NULL,
+            Contact NVARCHAR(50),
+            Bookings INT DEFAULT 0,
+            Email NVARCHAR(255) UNIQUE NOT NULL,
+            Password NVARCHAR(255) NOT NULL
+          );
+
+
+    - name: Crear tabla supplier
+      community.general.mssql_script:
+        login_host: "{{ server }}"
+        login_user: "{{ user }}"
+        login_password: "{{ password }}"
+        login_port: "{{ port }}"
+        name: "{{ database }}"
+        script: |
+          CREATE TABLE supplier (
+            ID INT IDENTITY(1,1) PRIMARY KEY,
+            Name NVARCHAR(255) NOT NULL,
+            Contact NVARCHAR(50),
+            Description TEXT
+          );
+
+    - name: Crear tabla offers
+      community.general.mssql_script:
+        login_host: "{{ server }}"
+        login_user: "{{ user }}"
+        login_password: "{{ password }}"
+        login_port: "{{ port }}"
+        name: "{{ database }}"
+        script: |
+          CREATE TABLE Offers (
+            ID INT IDENTITY(1,1) PRIMARY KEY,
+            Id_flight INT NOT NULL,
+            Discount DECIMAL(5, 2) NOT NULL,
+            Customer_type NVARCHAR(50) NOT NULL,
+            Flight_type NVARCHAR(50) NOT NULL
+          );
+
+
+    - name: Crear tabla standard C
+      community.general.mssql_script:
+        login_host: "{{ server }}"
+        login_user: "{{ user }}"
+        login_password: "{{ password }}"
+        login_port: "{{ port }}"
+        name: "{{ database }}"
+        script: |
+          CREATE TABLE standard_class (
+            ID INT IDENTITY(1,1) PRIMARY KEY,
+            Origin NVARCHAR(255) NOT NULL,
+            Destination NVARCHAR(255) NOT NULL,
+            Date DATE NOT NULL,
+            Positions INT NOT NULL,
+            Hour TIME NOT NULL,
+            Id_agency INT NOT NULL,
+            Standard_cost DECIMAL(10, 2) NOT NULL
+          );
+
+
+    - name: Crear tabla First C
+      community.general.mssql_script:
+        login_host: "{{ server }}"
+        login_user: "{{ user }}"
+        login_password: "{{ password }}"
+        login_port: "{{ port }}"
+        name: "{{ database }}"
+        script: |
+          CREATE TABLE first_class (
+            ID INT IDENTITY(1,1) PRIMARY KEY,
+            Origin NVARCHAR(255) NOT NULL,
+            Destination NVARCHAR(255) NOT NULL,
+            Date DATE NOT NULL,
+            Positions INT NOT NULL,
+            Hour TIME NOT NULL,
+            Id_agency INT NOT NULL,
+            Premium_cost DECIMAL(10, 2) NOT NULL
+          );
+
+
+    - name: Crear tabla bookings
+      community.general.mssql_script:
+        login_host: "{{ server }}"
+        login_user: "{{ user }}"
+        login_password: "{{ password }}"
+        login_port: "{{ port }}"
+        name: "{{ database }}"
+        script: |
+          CREATE TABLE bookings (
+            ID INT IDENTITY(1,1) PRIMARY KEY,
+            Cant_positions INT NOT NULL,
+            Id_flight INT NOT NULL,
+            Id_client INT NOT NULL,
+            Type_flight NVARCHAR(50) NOT NULL,
+            Type_client NVARCHAR(50) NOT NULL,
+            Cost_position DECIMAL(10, 2) NOT NULL
+          );
