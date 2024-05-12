@@ -8,46 +8,14 @@
     database: "appdb"
 
   tasks:
-    - name: Instalar pymssql
-      apt:
-        name: python3-pymssql
-        state: present
-      become: true
+    - uses: actions/checkout@v3  
+    - name: Install Python dependencies
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'  
+    - name: Install pymssql
+      run: pip install pymssql
 
-    - name: Instalar MySQL
-      apt:
-        name: mysql-server
-        state: present
-    - name: Actualizar lista de paquetes
-      apt:
-        update_cache: yes
-      become: true
-     - name: Install collection community.network
-      community.general.ansible_galaxy_install:
-        type: collection
-        name: community.network
-    
-    - name: Install role at specific path
-      community.general.ansible_galaxy_install:
-        type: role
-        name: ansistrano.deploy
-        dest: /ansible/roles
-    
-    - name: Install collections and roles together
-      community.general.ansible_galaxy_install:
-        type: both
-        requirements_file: requirements.yml
-    
-    - name: Force-install collection community.network at specific version
-      community.general.ansible_galaxy_install:
-        type: collection
-        name: community.network:3.0.2
-        force: true
-    
-    - name: Actualizar todos los paquetes
-      apt:
-        upgrade: yes
-      become: true
 
     - name: Comprobar conexión a Azure SQL Server
       community.general.mssql_db:
