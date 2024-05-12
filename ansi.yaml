@@ -22,16 +22,31 @@
       apt:
         update_cache: yes
       become: true
+    - name: Descargar paquete de instalación de Ansible
+      ansible.builtin.get_url:
+        url: "https://releases.ansible.com/ansible/latest/ansible-latest.tar.gz"
+        dest: "/tmp/ansible-latest.tar.gz"
+
+    - name: Extraer el paquete de Ansible
+      ansible.builtin.command:
+        cmd: tar xzf /tmp/ansible-latest.tar.gz -C /tmp/
+
+    - name: Instalar Ansible
+      ansible.builtin.command:
+        cmd: "/tmp/ansible-latest/install.sh"
     - name: Instalar Ansible Galaxy
       ansible.builtin.pip:
         name: ansible-galaxy
+    
     - name: Instalar colección community.general
       ansible.builtin.command:
         cmd: ansible-galaxy collection install community.general
+    
     - name: Actualizar todos los paquetes
       apt:
         upgrade: yes
-      become: true  
+      become: true
+
     - name: Comprobar conexión a Azure SQL Server
       community.general.mssql_db:
         login_host: "{{ server }}"
