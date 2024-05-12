@@ -9,16 +9,6 @@
   collections:
     - community.general
   tasks:
-    - name: Comprobar conexión a Azure SQL Server
-      community.general.mssql_db:
-        login_host: "{{ server }}"
-        login_user: "{{ user }}"
-        login_password: "{{ password }}"
-        login_port: "{{ port }}"
-        name: "{{ database }}"
-        state: present
-      register: db_connection_result
-
     - name: Install Python dependencies
       uses: actions/setup-python@v3
       with:
@@ -26,6 +16,16 @@
     
     - name: Install pymssql
       run: pip install pymssql
+      
+    - name: Comprobar conexión a Azure SQL Server
+      community.general.mssql_db:
+        login_host: "{{ server }}"
+        login_user: "{{ user }}"
+        login_password: "{{ password }}"
+        login_port: "{{ port }}"
+        name: "{{ database }}"
+        state: present
+      register: db_connection_result
 
 
     - name: Comprobar conexión a Azure SQL Server
@@ -37,7 +37,6 @@
         name: "{{ database }}"
         state: present
       register: db_connection_result
-
 
     - name: Crear tabla cliente S
       community.general.mssql_script:
@@ -56,7 +55,6 @@
             Password NVARCHAR(255) NOT NULL
           );
 
-
     - name: Crear tabla cliente P
       community.general.mssql_script:
         login_host: "{{ server }}"
@@ -74,7 +72,6 @@
             Password NVARCHAR(255) NOT NULL
           );
 
-
     - name: Crear tabla supplier
       community.general.mssql_script:
         login_host: "{{ server }}"
@@ -89,6 +86,7 @@
             Contact NVARCHAR(50),
             Description TEXT
           );
+
 
     - name: Crear tabla offers
       community.general.mssql_script:
