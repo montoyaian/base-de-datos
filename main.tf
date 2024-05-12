@@ -27,7 +27,7 @@ resource "azurerm_resource_group" "app_grp" {
   location = local.location
 }
 
-resource "azurerm_sql_firewall_rule" "allow_all" {
+resource "azurerm_mssql_firewall_rule" "allow_all" {
   name                = "AllowAll"
   resource_group_name = azurerm_resource_group.app_grp.name
   server_name         = azurerm_sql_server.app_server_montoya.name
@@ -35,7 +35,7 @@ resource "azurerm_sql_firewall_rule" "allow_all" {
   end_ip_address      = "255.255.255.255"
 }
 
-resource "azurerm_sql_server" "app_server_montoya" {
+resource "azurerm_mssql_server" "app_server_montoya" {
   name                         = "appservermontoya"
   resource_group_name          = azurerm_resource_group.app_grp.name
   location                     = "East US"
@@ -44,7 +44,7 @@ resource "azurerm_sql_server" "app_server_montoya" {
   administrator_login_password = "Azure@123"
 }
 
-resource "azurerm_sql_database" "app_db" {
+resource "azurerm_mssql_database" "app_db" {
   name                = "appdb"
   resource_group_name = azurerm_resource_group.app_grp.name
   location            = "East US"
