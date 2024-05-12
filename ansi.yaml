@@ -8,16 +8,24 @@
     database: "appdb"
   collections:
     - community.general
-  steps:
-    - uses: actions/checkout@v3  
+  tasks:
+    - name: Comprobar conexión a Azure SQL Server
+      community.general.mssql_db:
+        login_host: "{{ server }}"
+        login_user: "{{ user }}"
+        login_password: "{{ password }}"
+        login_port: "{{ port }}"
+        name: "{{ database }}"
+        state: present
+      register: db_connection_result
+
     - name: Install Python dependencies
       uses: actions/setup-python@v3
       with:
         python-version: '3.x'  
+    
     - name: Install pymssql
       run: pip install pymssql
-  
-  tasks:
 
 
     - name: Comprobar conexión a Azure SQL Server
