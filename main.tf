@@ -8,22 +8,31 @@ terraform {
 }
 
 provider "azurerm" {
-    features {}
-    subscription_id = "498b2d39-4e52-47b6-a5db-26e2295a6498"
-    client_id       = "d75efb8f-6614-4576-8bab-21eb2ee01d16"
-    client_secret   = "dLY8Q~YIhsj~yJt.5J4EGgPkm9rxmiOdkWGE6dql"
-    tenant_id       = "d58477fd-f9c4-4eb6-a699-400fd4f0a312"
+  skip_provider_registration = "true"
+  features {
+
+  }
 }
 
 
+
+
 locals {
-  resource_group = "app-grp"
+  resource_group = "app-grp-db"
   location       = "East US"
 }
 
 resource "azurerm_resource_group" "app_grp" {
   name     = local.resource_group
   location = local.location
+}
+
+resource "azurerm_sql_firewall_rule" "allow_all" {
+  name                = "AllowAll"
+  resource_group_name = azurerm_resource_group.app_grp.name
+  server_name         = azurerm_sql_server.app_server_montoya.name
+  start_ip_address    = "0.0.0.0"
+  end_ip_address      = "255.255.255.255"
 }
 
 resource "azurerm_sql_server" "app_server_montoya" {
@@ -42,6 +51,8 @@ resource "azurerm_sql_database" "app_db" {
   server_name         = azurerm_sql_server.app_server_montoya.name
   depends_on          = [azurerm_sql_server.app_server_montoya]
 }
+
+
 
 resource "null_resource" "run_ansible" {
   depends_on = [azurerm_sql_database.app_db]
