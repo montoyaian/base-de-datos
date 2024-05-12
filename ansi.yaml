@@ -9,7 +9,7 @@
 
   tasks:
     - name: Install pymssql
-      run: pip install pymssql
+        run: pip install pymssql
     - name: Comprobar conexión a Azure SQL Server
       community.general.mssql_db:
         login_host: "{{ server }}"
