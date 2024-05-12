@@ -6,8 +6,9 @@
     user: "sqladmin"
     password: "Azure@123"
     database: "appdb"
-
-  tasks:
+  collections:
+    - community.general
+  steps:
     - uses: actions/checkout@v3  
     - name: Install Python dependencies
       uses: actions/setup-python@v3
@@ -15,6 +16,8 @@
         python-version: '3.x'  
     - name: Install pymssql
       run: pip install pymssql
+  
+  tasks:
 
 
     - name: Comprobar conexión a Azure SQL Server
