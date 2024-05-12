@@ -1,6 +1,7 @@
 - name: Connect to Database
   hosts: localhost
   vars:
+    ansible_python_interpreter: /usr/bin/python3
     server: "appservermontoya.database.windows.net"
     port: 1433
     user: "sqladmin"
@@ -13,6 +14,7 @@
       apt:
         name: python3-pymssql
         state: present
+        executable: /usr/bin/python3
       become: true
       
     - name: Comprobar conexión a Azure SQL Server
