@@ -8,9 +8,9 @@
     database: "appdb"
 
   tasks:
-    - name: Instalar PyMySQL
+    - name: Instalar pymssql
       apt:
-        name: python3-pymysql
+        name: python3-pymssql
         state: present
       become: true
 
@@ -18,7 +18,15 @@
       apt:
         name: mysql-server
         state: present
-  
+    - name: Actualizar lista de paquetes
+      apt:
+        update_cache: yes
+      become: true
+
+    - name: Actualizar todos los paquetes
+      apt:
+        upgrade: yes
+      become: true  
     - name: Comprobar conexión a Azure SQL Server
       community.general.mssql_db:
         login_host: "{{ server }}"
