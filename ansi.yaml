@@ -9,11 +9,6 @@
   collections:
     - community.general
   tasks:
-    - name: Install Python dependencies
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.x'  
-    
     - name: Install pymssql
       run: pip install pymssql
       
