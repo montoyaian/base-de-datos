@@ -22,7 +22,12 @@
       apt:
         update_cache: yes
       become: true
-
+    - name: Instalar Ansible Galaxy
+      ansible.builtin.pip:
+        name: ansible-galaxy
+    - name: Instalar colección community.general
+      ansible.builtin.command:
+        cmd: ansible-galaxy collection install community.general
     - name: Actualizar todos los paquetes
       apt:
         upgrade: yes
