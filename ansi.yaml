@@ -14,7 +14,6 @@
       apt:
         name: python3-pymssql
         state: present
-        executable: /usr/bin/python3
       become: true
       
     - name: Comprobar conexión a Azure SQL Server
