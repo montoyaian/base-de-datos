@@ -8,24 +8,6 @@
     database: "appdb"
 
   tasks:
-
-    - name: Instalar PyMySQL
-      apt:
-        name: python3-pymysql
-        state: present
-      become: true
-
-    - name: Instalar MySQL
-      apt:
-        name: mysql-server
-        state: present
-
-    - name: Iniciar servicio MySQL
-      service:
-        name: mysql
-        state: started
-        enabled: yes
-      
     - name: Comprobar conexión a Azure SQL Server
       community.general.mssql_db:
         login_host: "{{ server }}"
@@ -35,7 +17,6 @@
         name: "{{ database }}"
         state: present
       register: db_connection_result
-
 
     - name: Crear tabla cliente S
       community.general.mssql_script:
